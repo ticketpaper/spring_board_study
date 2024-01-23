@@ -2,33 +2,35 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <title>Title</title>
 </head>
 <body>
-    <div th:replace="~{header :: headerFragment}"></div>
-    <div class="container">
-    <div class="page-header"><h1>회원 목록</h1></div>
-    <table class = "table">
+<div th:replace="~{header :: headerFragment}"></div>
+<div class="container">
+    <div class="page-header">
+        <h1 class="display-4">회원 목록</h1>
+    </div>
+    <table class="table">
         <thead>
-            <tr>
-                <th>id</th>
-                <th>이름</th>
-                <th>이메일</th>
-                <th>상세보기</th>
-            </tr>
+        <tr>
+            <th>id</th>
+            <th>이름</th>
+            <th>이메일</th>
+            <th>상세보기</th>
+        </tr>
         </thead>
         <tbody>
-            <tr th:each="authorList: ${authorList}">
-                <td th:text="${authorList.id}"></td>
-                <td th:text="${authorList.name}"></td>
-                <td th:text="${authorList.email}"></td>
-                <td>
-                    <a th:href="@{'/author/detail/' + ${authorList.id}}">상세보기</a>
-                </td>
-            </tr>
+        <tr th:each="authorList: ${authorList}">
+            <td th:text="${authorList.id}"></td>
+            <td th:text="${authorList.name}"></td>
+            <td th:text="${authorList.email}"></td>
+            <td>
+                <a class="btn btn-primary" th:href="@{'/author/detail/' + ${authorList.id}}">보기</a>
+            </td>
+        </tr>
         </tbody>
     </table>
-    </div>
+</div>
 </body>
 </html>

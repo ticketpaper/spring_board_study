@@ -2,28 +2,43 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <style>
+        /* 셀 간격 조절을 위한 스타일 추가 */
+        .table th, .table td {
+            padding: 0.5rem; /* 원하는 간격으로 조절 */
+        }
+
+        /* id와 제목 사이 간격 좁히기 */
+        .table td:first-child {
+            padding-right: -10%; /* 원하는 간격으로 조절 */
+        }
+    </style>
     <title>Title</title>
 </head>
 <body>
-    <div th:replace="~{header :: headerFragment}"></div>
-    <div class="container">
-    <div class="page-header"><h1>게시글 목록</h1></div>
-    <div class="float-end">
-        <a href="./7.css_bootstrap_postregister.html">
-            <button class="btn btn-primary">글쓰기</button>
-        </a>
+<div th:replace="~{header :: headerFragment}"></div>
+<div class="container">
+    <div class="page-header">
+        <h1 class="display-4">게시글 목록</h1>
     </div>
-    <table class = "table">
+    <div class="float-end">
+        <a href="/post/posting" class="btn btn-primary">글쓰기</a>
+    </div>
+    <table class="table">
         <thead>
         <tr>
             <th>id</th>
-            <th>title</th>
-            <th>contents</th>
-            <th>author_name</th>
+            <th>제목</th>
         </tr>
         </thead>
+        <tbody>
+        <tr th:each="postList : ${postList}" th:onclick="'window.location.href=\'/post/detail/' + ${postList.id} + '\''">
+            <td th:text="${postList.id}"></td>
+            <td th:text="${postList.title}"></td>
+        </tr>
+        </tbody>
     </table>
-    </div>
+</div>
 </body>
 </html>
