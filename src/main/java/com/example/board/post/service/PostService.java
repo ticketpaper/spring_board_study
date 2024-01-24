@@ -33,7 +33,10 @@ public class PostService {
     }
 
     public void posting(PostingReqDto postingReqDto) {
-        Post post = new Post(postingReqDto.getTitle(), postingReqDto.getContents());
+        Post post = Post.builder()
+                .title(postingReqDto.getTitle())
+                .contents(postingReqDto.getContents())
+                .build();
         postRepository.save(post);
     }
 

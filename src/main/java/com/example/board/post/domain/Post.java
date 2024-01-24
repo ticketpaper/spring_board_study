@@ -1,5 +1,7 @@
 package com.example.board.post.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,6 +13,8 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Entity
+@AllArgsConstructor
+@Builder
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +30,7 @@ public class Post {
     @UpdateTimestamp
     private LocalDateTime update_time;
 
-    public Post(String title, String contents) {
-        this.title = title;
-        this.contents = contents;
-    }
+
 
     public void Update(String title, String contents) {
         this.title = title;
