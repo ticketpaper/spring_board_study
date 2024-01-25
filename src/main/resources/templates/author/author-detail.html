@@ -38,24 +38,28 @@
                 <td class="form-control-plaintext" th:text="${authorList.id}"></td>
             </tr>
             <tr>
-                <th scope="col">Name</th>
+                <th scope="col">이름</th>
                 <td class="form-control-plaintext" th:text="${authorList.name}"></td>
             </tr>
             <tr>
-                <th scope="col">Email</th>
+                <th scope="col">이메일</th>
                 <td class="form-control-plaintext" th:text="${authorList.email}"></td>
             </tr>
             <tr>
-                <th scope="col">Password</th>
+                <th scope="col">패스워드</th>
                 <td class="form-control-plaintext" th:text="${authorList.password}"></td>
             </tr>
             <tr>
-                <th scope="col">Created Time</th>
+                <th scope="col">가입일자</th>
                 <td class="form-control-plaintext" th:text="${authorList.createdTime}"></td>
             </tr>
             <tr>
-                <th scope="col">Role</th>
+                <th scope="col">권한</th>
                 <td class="form-control-plaintext" th:text="${authorList.role}"></td>
+            </tr>
+            <tr>
+                <th scope="col">작성한 게시글 수</th>
+                <td class="form-control-plaintext" th:text="${authorList.postCount}"></td>
             </tr>
         </table>
         <button class="btn btn-primary" onclick="toggleForm()">수정</button>

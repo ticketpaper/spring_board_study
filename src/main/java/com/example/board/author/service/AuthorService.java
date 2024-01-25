@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,20 @@ public class AuthorService {
                         .email(authorSaveReqDto.getEmail())
                         .password(authorSaveReqDto.getPassword())
                         .build();
+
+////        cascade.persist 테스트
+////        부모테이블을 통해 자식테이블에 객체를 동시에 생성
+////        List<Post> postList = new ArrayList<>();
+//        Post.builder()
+//                .title(author.getName()+" 입니다.")
+//                .contents("테스트 입니다.")
+//                .author(author)
+//                .build();
+//        postList.add(post);
+//        author.setPostList(postList);
+
         authorRepository.save(author);
+
     }
 
     public List<AuthorListResDto> authorList() {
@@ -69,7 +83,7 @@ public class AuthorService {
         return author;
     }
 
-    public AuthorDetailResDto findauthorDetail(Long id){
+    public AuthorDetailResDto findAuthorDetail(Long id){
         Author byId = this.findById(id);
         AuthorDetailResDto authorDetailResDto = new AuthorDetailResDto();
         authorDetailResDto.setId(byId.getId());
@@ -82,15 +96,20 @@ public class AuthorService {
         } else {
             authorDetailResDto.setRole("일반유저");
         }
+        authorDetailResDto.setPostCount(byId.getPostList().size());
         return authorDetailResDto;
     }
 
+    @Transactional
     public Long authorUpdate(AuthorUpdateReqDto authorUpdateReqDto) {
         Author author = this.findByEmail(authorUpdateReqDto.getEmail());
         author.update(authorUpdateReqDto.getName(), authorUpdateReqDto.getPassword());
-        authorRepository.save(author);
+//        명시적으로 save를 하지 않더라도, jpa의 영속성 컨텍스트를 통해,
+//        객체의 변경이 감지(더티 체킹)되면, 타랜잭션이 완료되는 시점에 save 동작
+//        authorRepository.save(author);
         return author.getId();
     }
+
 
     public void authorDelete(Long id) {
         Author byId = this.findById(id);

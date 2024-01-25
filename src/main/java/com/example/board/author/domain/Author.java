@@ -1,13 +1,16 @@
 package com.example.board.author.domain;
 
+import com.example.board.post.domain.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Entity
@@ -30,6 +33,12 @@ public class Author {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Setter // cascade.persist 테스트를 위한
+//    mappedBy에 연관관계의 주인을 명시하고, fk를 관리하는 변수명을 명시
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    author를 조회할때 post객체가 필요할때에 선언한다.
+    private List<Post> postList;
 
 
     @CreationTimestamp

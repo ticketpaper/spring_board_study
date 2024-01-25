@@ -30,12 +30,14 @@
         <tr>
             <th>id</th>
             <th>제목</th>
+            <th>작성자 이메일</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="postList : ${postList}" th:onclick="'window.location.href=\'/post/detail/' + ${postList.id} + '\''">
             <td th:text="${postList.id}"></td>
             <td th:text="${postList.title}"></td>
+            <td th:text="${postList.author_email}"></td>
         </tr>
         </tbody>
     </table>

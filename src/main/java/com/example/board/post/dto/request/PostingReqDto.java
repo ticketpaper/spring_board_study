@@ -6,4 +6,5 @@ import lombok.Data;
 public class PostingReqDto {
     private String title;
     private String contents;
+    private String email;
 }
