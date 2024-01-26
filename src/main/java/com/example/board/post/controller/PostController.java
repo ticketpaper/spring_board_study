@@ -5,13 +5,15 @@ import com.example.board.post.dto.response.PostDetailResDto;
 import com.example.board.post.dto.response.PostListResDto;
 import com.example.board.post.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.List;
 
 @Controller
 public class PostController {
@@ -22,12 +24,23 @@ public class PostController {
         this.postService = postService;
     }
 
+
     @GetMapping("/post/list")
-    public String postList(Model model) {
-        List<PostListResDto> postListResDtos = postService.postList();
+    public String postList(Model model, @PageableDefault(size = 5, sort="id", direction= Sort.Direction.DESC) Pageable pageable) {
+        Page<PostListResDto> postListResDtos = postService.postListPasing(pageable);
         model.addAttribute("postList", postListResDtos);
         return "post/post-list";
     }
+
+
+
+////    localhost:8080/post/list?size=xx&page=xx&sort=xx,desc
+//    @GetMapping("/json/post/list")
+//    @ResponseBody
+//    public Page<PostListResDto> postListJson(Pageable pageable) {
+//        Page<PostListResDto> postListResDtos = postService.postListPasing(pageable);
+//        return postListResDtos;
+//    }
 
     @GetMapping("/post/posting")
     public String postingGet() {

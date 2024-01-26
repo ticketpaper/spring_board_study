@@ -8,6 +8,8 @@ import com.example.board.post.dto.response.PostDetailResDto;
 import com.example.board.post.dto.response.PostListResDto;
 import com.example.board.post.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -32,9 +34,19 @@ public class PostService {
             PostListResDto postListResDto1 = new PostListResDto();
             postListResDto1.setId(post.getId());
             postListResDto1.setTitle(post.getTitle());
-            postListResDto1.setAuthor_email(post.getAuthor()==null?"ㅇㅇ" : post.getAuthor().getEmail());
+            postListResDto1.setAuthor_name(post.getAuthor()==null?"ㅇㅇ" : post.getAuthor().getName());
             postListResDtos.add(postListResDto1);
         }
+        return postListResDtos;
+    }
+
+
+    public Page<PostListResDto> postListPasing(Pageable pageable) {
+
+        Page<Post> post = postRepository.findAll(pageable);
+        Page<PostListResDto> postListResDtos = post.map(
+                p -> new PostListResDto(p.getId(), p.getTitle(), p.getAuthor() == null ? "ㅇㅇ" : p.getAuthor().getName())
+        );
         return postListResDtos;
     }
 

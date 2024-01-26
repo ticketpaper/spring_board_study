@@ -34,7 +34,7 @@ public class AuthorServiceTest {
         Mockito.when(authorRepository.findAll()).thenReturn(authorList);
 
 //        검증
-        assertEquals(2,authorService.authorList().size());
+        assertEquals(authorList.size(),authorService.authorList().size());
     }
 
     @Test

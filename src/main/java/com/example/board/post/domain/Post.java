@@ -1,6 +1,7 @@
 package com.example.board.post.domain;
 
 import com.example.board.author.domain.Author;
+import jdk.jfr.Timestamp;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,11 @@ public class Post {
     @Column(columnDefinition = "TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @UpdateTimestamp
     private LocalDateTime update_time;
+    @Timestamp
+    private LocalDateTime appointmentTime;
+
+    @Enumerated(EnumType.STRING)
+    private appointment appointment;
 
     @Builder
     public Post(String title, String contents, Author author) {
@@ -49,4 +55,9 @@ public class Post {
         this.title = title;
         this.contents = contents;
     }
+}
+
+enum appointment{
+    Y,
+    N;
 }
