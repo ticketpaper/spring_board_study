@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,9 +43,23 @@ public class PostService {
     }
 
 
-    public Page<PostListResDto> postListPasing(Pageable pageable) {
-
+    public Page<PostListResDto> postListPaging(Pageable pageable) {
         Page<Post> post = postRepository.findAll(pageable);
+        Page<PostListResDto> postListResDtos = post.map(
+                p -> new PostListResDto(p.getId(), p.getTitle(), p.getAuthor() == null ? "ㅇㅇ" : p.getAuthor().getName())
+        );
+        return postListResDtos;
+    }
+
+    public Page<PostListResDto> findByAppointment(Pageable pageable) {
+        Page<Post> post = postRepository.findByAppointment("Y", pageable);
+        Page<PostListResDto> postListResDtos = post.map(
+                p -> new PostListResDto(p.getId(), p.getTitle(), p.getAuthor() == null ? "ㅇㅇ" : p.getAuthor().getName())
+        );
+        return postListResDtos;
+    }
+    public Page<PostListResDto> findByAppointmentIsNull(Pageable pageable) {
+        Page<Post> post = postRepository.findByAppointmentIsNull(pageable);
         Page<PostListResDto> postListResDtos = post.map(
                 p -> new PostListResDto(p.getId(), p.getTitle(), p.getAuthor() == null ? "ㅇㅇ" : p.getAuthor().getName())
         );
@@ -52,12 +68,24 @@ public class PostService {
 
 
 //    @Transactional
-    public void posting(PostingReqDto postingReqDto) {
+    public void posting(PostingReqDto postingReqDto) throws IllegalArgumentException{
         Author author = authorRepository.findByEmail(postingReqDto.getEmail()).orElse(null);
+        LocalDateTime localDateTime = null;
+        String appointment = null;
+        if (postingReqDto.getAppointment().equals("Y") && !(postingReqDto.getAppointmentTime().isEmpty())) {
+            appointment = "Y";
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            localDateTime = LocalDateTime.parse(postingReqDto.getAppointmentTime(), dateTimeFormatter);
+            if (localDateTime.isBefore(LocalDateTime.now())) {
+                throw new IllegalArgumentException("시간정보 잘못 입력");
+            }
+        }
         Post post = Post.builder()
                 .title(postingReqDto.getTitle())
                 .contents(postingReqDto.getContents())
                 .author(author)
+                .appointment(appointment)
+                .appointmentTime(localDateTime)
                 .build();
 //        더티 체킹 테스트 save안해도 변경사항이 저장된다.
 //        author.update("진짜진짜 바꿨음"," 바꾼다?");

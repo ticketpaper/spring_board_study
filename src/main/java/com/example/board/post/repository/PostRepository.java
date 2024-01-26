@@ -29,4 +29,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
      */
     @Query("select p from Post p left join fetch p.author") // jpql문
     List<Post> findAllFetchJoin();
+
+    Page<Post> findByAppointment(String appointment, Pageable pageable);
+    Page<Post> findByAppointmentIsNull(Pageable pageable);
+
+
 }

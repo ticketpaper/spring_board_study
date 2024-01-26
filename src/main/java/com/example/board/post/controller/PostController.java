@@ -27,7 +27,7 @@ public class PostController {
 
     @GetMapping("/post/list")
     public String postList(Model model, @PageableDefault(size = 5, sort="id", direction= Sort.Direction.DESC) Pageable pageable) {
-        Page<PostListResDto> postListResDtos = postService.postListPasing(pageable);
+        Page<PostListResDto> postListResDtos = postService.findByAppointmentIsNull(pageable);
         model.addAttribute("postList", postListResDtos);
         return "post/post-list";
     }
@@ -48,6 +48,7 @@ public class PostController {
     }
     @PostMapping("/post/posting")
     public String posting(PostingReqDto postingReqDto) {
+        System.out.println(postingReqDto);
         postService.posting(postingReqDto);
         return "redirect:/post/list";
     }

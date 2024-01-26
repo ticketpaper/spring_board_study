@@ -1,10 +1,7 @@
 package com.example.board.post.domain;
 
 import com.example.board.author.domain.Author;
-import jdk.jfr.Timestamp;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,6 +11,8 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,28 +35,17 @@ public class Post {
     @Column(columnDefinition = "TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @UpdateTimestamp
     private LocalDateTime update_time;
-    @Timestamp
     private LocalDateTime appointmentTime;
 
-    @Enumerated(EnumType.STRING)
-    private appointment appointment;
-
-    @Builder
-    public Post(String title, String contents, Author author) {
-        this.title = title;
-        this.contents = contents;
-        this.author = author;
-//        author 객체의 postList를 초기화 시켜준 후
-//        this.author.getPostList().add(this);
-    }
+    private String appointment;
 
     public void Update(String title, String contents) {
         this.title = title;
         this.contents = contents;
     }
-}
 
-enum appointment{
-    Y,
-    N;
+    public void UpdateAppointment(String appointment) {
+        this.appointment = appointment;
+    }
+
 }

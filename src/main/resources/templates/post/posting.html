@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POSTING</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
     <style>
         body {
@@ -40,9 +41,11 @@
             box-sizing: border-box;
             border: 1px solid #ced4da;
             border-radius: 4px;
-            height: 200px; /* 또는 다른 원하는 높이로 변경하세요 */
+            height: 200px;
         }
-
+        .form-group input[type="submit"] {
+            margin-top: 20px; /* 원하는 만큼의 마진 값으로 조절하세요 */
+        }
         input[type="text"] {
             width: 100%;
             padding: 8px;
@@ -79,7 +82,7 @@
     <div class="page-header">
         <h1>게시글 등록</h1>
     </div>
-    <form action="http://localhost:8082/post/posting" method="post">
+    <form action="http://localhost:8082/post/posting" method="post" onsubmit="return validateForm()">
         <div class="form-group">
             <label for="title">제목</label>
             <input type="text" id="title" name="title" class="form-control">
@@ -94,24 +97,32 @@
         </div>
         <div class="form-group">
             <label for="contents">
-                예약 작성 시간
-                <input type="datetime-local">
+                예약 작성
+                <label for="contents">
+                    <input type="radio" id="appointment_time_yes" name="appointment" value="Y"
+                           onclick="toggleAppointmentTime(true)"> YES
+                    <input type="radio" id="appointment_time_no" name="appointment" value="N" checked
+                           onclick="toggleAppointmentTime(false)"> NO
+                </label>
+                <div id="appointmentTimeMessage" style="display: none; color: red;">
+                    예약할 시간을 입력해주세요
+                </div>
+                <input type="datetime-local" name="appointmentTime" id="appointmentTimeField"
+                       style="display: none;">
             </label><br>
         </div>
-        <input type="submit" value="제출">
-        
+        <div class="form-group">
+            <input type="submit" value="제출">
+        </div>
     </form>
 </div>
 <div class="modal fade" id="confirmModal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <!-- Modal Header -->
             <div class="modal-header">
                 <h5 class="modal-title" id="confirmModalLabel">제출 확인</h5>
             </div>
-            <!-- Modal Body -->
             <div class="modal-body">폼을 제출하시겠습니까?</div>
-            <!-- Modal Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                 <button type="button" class="btn btn-primary" onclick="modalSubmit()">제출하기</button>
@@ -120,6 +131,44 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function toggleAppointmentTime(show) {
+        var appointmentTimeField = document.getElementById('appointmentTimeField');
+        var appointmentTimeMessage = document.getElementById('appointmentTimeMessage');
+
+        if (show) {
+            appointmentTimeField.style.display = 'block';
+            appointmentTimeMessage.style.display = 'block';
+        } else {
+            appointmentTimeField.style.display = 'none';
+            appointmentTimeMessage.style.display = 'none';
+        }
+    }
+
+    function validateForm() {
+        var appointmentYes = document.getElementById('appointment_time_yes').checked;
+        if (appointmentYes) {
+            var appointmentTimeField = document.getElementById('appointmentTimeField');
+            if (appointmentTimeField.value === '') {
+                alert('예약 시간을 입력해주세요.');
+                return false;
+            }
+
+            // 현재 시간을 가져오기
+            var currentTime = new Date();
+
+            // 입력된 예약 시간을 JavaScript Date 객체로 변환
+            var selectedTime = new Date(appointmentTimeField.value);
+
+            // 비교하여 이미 지난 시간이면 경고 메시지 표시
+            if (selectedTime <= currentTime) {
+                alert('이미 지난 시간은 선택할 수 없습니다. 다시 입력해주세요.');
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
 </body>
 
 </html>

@@ -14,6 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuthorService {
@@ -23,7 +24,11 @@ public class AuthorService {
         this.authorRepository = authorRepository;
     }
 
-    public void save(AuthorSaveReqDto authorSaveReqDto) {
+    public void save(AuthorSaveReqDto authorSaveReqDto) throws IllegalArgumentException{
+        Optional<Author> byEmail = authorRepository.findByEmail(authorSaveReqDto.getEmail());
+        if (byEmail.isPresent()) {
+            throw new IllegalArgumentException("이미 가입된 이메일입니다. 다른 이메일을 입력 해주세요.");
+        }
         Role role = null;
         if (authorSaveReqDto.getRole() == null || authorSaveReqDto.getRole().equals("USER")) {
             role = Role.USER;
@@ -40,10 +45,11 @@ public class AuthorService {
 
 //        빌더패턴
         Author author = Author.builder()
-                        .name(authorSaveReqDto.getName())
-                        .email(authorSaveReqDto.getEmail())
-                        .password(authorSaveReqDto.getPassword())
-                        .build();
+                .name(authorSaveReqDto.getName())
+                .email(authorSaveReqDto.getEmail())
+                .password(authorSaveReqDto.getPassword())
+                .role(role)
+                .build();
 
 ////        cascade.persist 테스트
 ////        부모테이블을 통해 자식테이블에 객체를 동시에 생성
