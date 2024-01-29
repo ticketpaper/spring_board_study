@@ -94,7 +94,7 @@ public class PostService {
     }
 
     public Post findById(Long id) {
-        Post byId = postRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Post byId = postRepository.findById(id).orElseThrow(()->new EntityNotFoundException("post not found"));
         return byId;
     }
 

@@ -26,7 +26,7 @@ public class PostController {
 
 
     @GetMapping("/post/list")
-    public String postList(Model model, @PageableDefault(size = 5, sort="id", direction= Sort.Direction.DESC) Pageable pageable) {
+    public String postList(Model model, @PageableDefault(size = 10, sort="id", direction= Sort.Direction.DESC) Pageable pageable) {
         Page<PostListResDto> postListResDtos = postService.findByAppointmentIsNull(pageable);
         model.addAttribute("postList", postListResDtos);
         return "post/post-list";

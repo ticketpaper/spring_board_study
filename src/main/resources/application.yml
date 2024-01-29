@@ -19,4 +19,11 @@ spring:
         format_sql: true
         show_sql: true
 
-
+logging:
+#  로그파일 경로와 파일명 지정
+  file:
+    name: logs/app.log
+  level:
+#    trace < debug < info < error : 순서의 log level을 가짐
+#    info로 설정하면 tarce, debug 출력 x
+    root: info

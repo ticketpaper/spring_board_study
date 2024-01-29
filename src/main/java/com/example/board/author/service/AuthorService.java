@@ -7,6 +7,7 @@ import com.example.board.author.dto.request.AuthorUpdateReqDto;
 import com.example.board.author.dto.response.AuthorDetailResDto;
 import com.example.board.author.dto.response.AuthorListResDto;
 import com.example.board.author.repository.AuthorRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class AuthorService {
     private final AuthorRepository authorRepository;
     @Autowired
@@ -80,7 +82,7 @@ public class AuthorService {
     }
 
     public Author findById(Long id) throws EntityNotFoundException{
-        Author byId = authorRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Author byId = authorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("author not found"));
         return byId;
     }
 
