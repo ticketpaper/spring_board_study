@@ -4,6 +4,7 @@ import com.example.board.post.dto.request.PostingReqDto;
 import com.example.board.post.dto.response.PostDetailResDto;
 import com.example.board.post.dto.response.PostListResDto;
 import com.example.board.post.service.PostService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpSession;
+
+@Slf4j
 @Controller
 public class PostController {
     PostService postService;
@@ -46,11 +50,21 @@ public class PostController {
     public String postingGet() {
         return "post/posting";
     }
+
     @PostMapping("/post/posting")
-    public String posting(PostingReqDto postingReqDto) {
-        System.out.println(postingReqDto);
-        postService.posting(postingReqDto);
-        return "redirect:/post/list";
+    public String posting(Model model, PostingReqDto postingReqDto, HttpSession httpSession) {
+        try {
+//            HttpServletRequest req를 매개변수에 주입한 뒤에
+//            HttpSession session = req.getSession(); 세션값을 꺼내어 getAttribute("email")
+
+            postService.posting(postingReqDto, httpSession.getAttribute("email").toString());
+            return "redirect:/post/list";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            log.error(e.getMessage());
+            return "/post/posting";
+        }
+
     }
 
     @GetMapping("/post/detail/{id}")

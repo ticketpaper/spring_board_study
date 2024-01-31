@@ -9,6 +9,7 @@ import com.example.board.author.dto.response.AuthorListResDto;
 import com.example.board.author.repository.AuthorRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -21,10 +22,14 @@ import java.util.Optional;
 @Slf4j
 public class AuthorService {
     private final AuthorRepository authorRepository;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public AuthorService(AuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository, PasswordEncoder passwordEncoder) {
         this.authorRepository = authorRepository;
+        this.passwordEncoder = passwordEncoder;
     }
+
 
     public void save(AuthorSaveReqDto authorSaveReqDto) throws IllegalArgumentException{
         Optional<Author> byEmail = authorRepository.findByEmail(authorSaveReqDto.getEmail());
@@ -49,7 +54,7 @@ public class AuthorService {
         Author author = Author.builder()
                 .name(authorSaveReqDto.getName())
                 .email(authorSaveReqDto.getEmail())
-                .password(authorSaveReqDto.getPassword())
+                .password(passwordEncoder.encode(authorSaveReqDto.getPassword()))
                 .role(role)
                 .build();
 

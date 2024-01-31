@@ -6,6 +6,7 @@ import com.example.board.author.dto.request.AuthorUpdateReqDto;
 import com.example.board.author.dto.response.AuthorDetailResDto;
 import com.example.board.author.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,11 @@ public class AuthorController {
         return "/author/author-create";
     }
 
+    @GetMapping("/author/login-page")
+    public String authorLogin() {
+        return "/author/login-page";
+    }
+
     @PostMapping("/author/create")
     public String authorCreatePost(Model model, AuthorSaveReqDto authorSaveReqDto) {
         try {
@@ -44,6 +50,7 @@ public class AuthorController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/author/list")
     public String authorList(Model model) {
         model.addAttribute("authorList", authorService.authorList());

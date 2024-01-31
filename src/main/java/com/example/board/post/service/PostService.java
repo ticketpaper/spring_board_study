@@ -68,8 +68,10 @@ public class PostService {
 
 
 //    @Transactional
-    public void posting(PostingReqDto postingReqDto) throws IllegalArgumentException{
-        Author author = authorRepository.findByEmail(postingReqDto.getEmail()).orElse(null);
+    public void posting(PostingReqDto postingReqDto, String email) throws IllegalArgumentException{
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String email = authentication.getName();
+        Author author = authorRepository.findByEmail(email).orElse(null);
         LocalDateTime localDateTime = null;
         String appointment = null;
         if (postingReqDto.getAppointment().equals("Y") && !(postingReqDto.getAppointmentTime().isEmpty())) {
